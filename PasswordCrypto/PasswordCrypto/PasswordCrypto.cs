@@ -19,12 +19,8 @@ namespace PasswordCrypto
             RandomNumberGenerator r = RandomNumberGenerator.Create();
             byte[] salt = new byte[20];
             r.GetBytes(salt);
-            StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < salt.Length; i++)
-            {
-                sb.Append(salt[i].ToString("X2"));
-            }
-            return sb.ToString();
+            string str = BytesToString(salt);
+            return str;
         }
 
         /// <summary>
@@ -38,12 +34,8 @@ namespace PasswordCrypto
             SHA512 hash = SHA512.Create();
             byte[] bytes = Encoding.UTF8.GetBytes(ToInsecureString(password) + salt);
             byte[] hashedBytes = hash.ComputeHash(bytes);
-            StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < hashedBytes.Length; i++)
-            {
-                sb.Append(hashedBytes[i].ToString("X2"));
-            }
-            return sb.ToString();
+            string str = BytesToString(hashedBytes);
+            return str;
         }
 
         /// <summary>
@@ -80,6 +72,21 @@ namespace PasswordCrypto
                 System.Runtime.InteropServices.Marshal.ZeroFreeBSTR(ptr);
             }
             return returnValue;
+        }
+
+        /// <summary>
+        /// String representation of a byte array
+        /// </summary>
+        /// <param name="array">Byte array</param>
+        /// <returns>String of the byte array</returns>
+        private static string BytesToString(byte[] array)
+        {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < array.Length; i++)
+            {
+                sb.Append(array[i].ToString("X2"));
+            }
+            return sb.ToString();
         }
     }
 }
